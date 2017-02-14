@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Gymnastics Meet App</string>
+
     <string name="action_remove_all_events">Remove all events</string>
 </resources>

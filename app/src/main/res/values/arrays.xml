@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- An array with all the gymnastrics events-->
+    <string-array name="events">
+        <item name="event_balance_beam">Balance Beam</item>
+        <item name="event_floor_exercise">Floor Exercise</item>
+        <item name="event_pommel_horse">Pommel Horse</item>
+        <item name="event_still_rings">Still Rings</item>
+    </string-array>
+</resources>

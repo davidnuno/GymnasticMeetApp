@@ -29,7 +29,9 @@ public class EventDbHelper extends SQLiteOpenHelper {
         // Create a String that contains the SQL statement to create the pets table
         String SQL_CREATE_PETS_TABLE = "CREATE TABLE " + EventContract.EventEntry.TABLE_NAME + " ("
                 + EventContract.EventEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + EventContract.EventEntry.COLUYM_EVENT_TYPE + " TEXT NOT NULL );";
+                + EventContract.EventEntry.COLUMN_EVENT_NAME + " TEXT NOT NULL, "
+                + EventContract.EventEntry.COLUMN_EVENT_TYPE + " TEXT, "
+                + EventContract.EventEntry.COLUMN_EVENT_DETAILS + " TEXT);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_PETS_TABLE);

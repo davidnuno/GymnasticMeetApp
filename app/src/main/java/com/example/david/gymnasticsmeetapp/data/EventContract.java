@@ -24,10 +24,8 @@ public class EventContract {
         public static final String TABLE_NAME = "events";
 
         public static final String COLUMN_EVENT_NAME = "eventName";
-
-        public static final String COLUYM_EVENT_TYPE = "eventType";
-
-
+        public static final String COLUMN_EVENT_TYPE = "eventType";
+        public static final String COLUMN_EVENT_DETAILS = "eventDetails";
     }
 
 
