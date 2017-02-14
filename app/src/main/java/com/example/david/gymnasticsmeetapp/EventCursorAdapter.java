@@ -8,11 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.david.gymnasticsmeetapp.data.EventContract;
+import com.example.david.gymnasticsmeetapp.data.EventProvider;
+
 /**
  * Created by David on 2/13/2017.
  */
 
 public class EventCursorAdapter extends CursorAdapter {
+
+    private static final String LOG_TAG = "Steps => " + EventCursorAdapter.class.getSimpleName();
+
     /**
      * Recommended constructor.
      *
@@ -49,7 +55,17 @@ public class EventCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        TextView eventName = (TextView) view.findViewById(R.id.event_name);
-        TextView eventDetails = (TextView) view.findViewById(R.id.event_details);
+        TextView tvEventName = (TextView) view.findViewById(R.id.event_name);
+        TextView tvEventDetails = (TextView) view.findViewById(R.id.event_details);
+
+        int name = cursor.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_NAME);
+        int details = cursor.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_DETAILS);
+
+        String eventName = cursor.getString(name);
+        String eventDetails = cursor.getString(details);
+
+        tvEventName.setText(eventName);
+        tvEventDetails.setText(eventDetails);
+
     }
 }
