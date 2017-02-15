@@ -2,6 +2,7 @@ package com.example.david.gymnasticsmeetapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,13 +32,13 @@ public class EventCursorAdapter extends CursorAdapter {
     }
 
     /**
-     * Makes a new view to hold the data pointed to by cursor.
+     * Makes a new blank list item view. No data is set (or bound) to the views yet.
      *
-     * @param context Interface to application's global information
+     * @param context app context
      * @param cursor  The cursor from which to get the data. The cursor is already
      *                moved to the correct position.
      * @param parent  The parent to which the new view is attached to
-     * @return the newly created view.
+     * @return the newly created list item view.
      */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -64,6 +65,7 @@ public class EventCursorAdapter extends CursorAdapter {
         String eventName = cursor.getString(name);
         String eventDetails = cursor.getString(details);
 
+        Log.v(LOG_TAG, "Setting the text for TextViews.");
         tvEventName.setText(eventName);
         tvEventDetails.setText(eventDetails);
 

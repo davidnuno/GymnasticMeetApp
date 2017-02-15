@@ -2,4 +2,6 @@
     <string name="app_name">Gymnastics Meet App</string>
 
     <string name="action_remove_all_events">Remove all events</string>
+
+    <string name="insert_new_event">Insert event</string>
 </resources>

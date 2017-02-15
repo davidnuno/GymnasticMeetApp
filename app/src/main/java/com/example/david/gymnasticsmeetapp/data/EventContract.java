@@ -3,6 +3,9 @@ package com.example.david.gymnasticsmeetapp.data;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import static android.text.style.TtsSpan.GENDER_FEMALE;
+import static android.text.style.TtsSpan.GENDER_MALE;
+
 /**
  * Created by David on 2/13/2017.
  */
@@ -42,9 +45,13 @@ public class EventContract {
          */
         public static final String COLUMN_EVENT_NAME = "eventName";
 
-        /** The event type column for the event table.
+        /**
+         * Gender of the pet.
          *
-         * Type: TEXT
+         * The only possible values are {@link #EVENT_OTHER}, {@link #EVENT_BALANCE_BEAM},
+         * {@link #EVENT_FLOOR_EX}, {@link #EVENT_POMMEL_HORSE},or {@link #EVENT_STILL_RINGS}.
+         *
+         * Type: INTEGER
          */
         public static final String COLUMN_EVENT_TYPE = "eventType";
 
@@ -53,6 +60,24 @@ public class EventContract {
          * Type: TEXT
          */
         public static final String COLUMN_EVENT_DETAILS = "eventDetails";
+
+        /**
+         * Possible values for the gender of the pet.
+         */
+        public static int EVENT_OTHER = 0;
+        public static int EVENT_BALANCE_BEAM = 1;
+        public static int EVENT_FLOOR_EX = 2;
+        public static int EVENT_POMMEL_HORSE = 3;
+        public static int EVENT_STILL_RINGS = 4;
+
+        /**
+         * Returns whether or not the given event is {@link #EVENT_OTHER}, {@link #EVENT_BALANCE_BEAM},
+         * {@link #EVENT_FLOOR_EX}, {@link #EVENT_POMMEL_HORSE}, or {@link #EVENT_STILL_RINGS}.
+         */
+        public static boolean isValidEvent(int event) {
+            return event == EVENT_OTHER || event == EVENT_BALANCE_BEAM || event == EVENT_FLOOR_EX ||
+                    event == EVENT_POMMEL_HORSE || event == EVENT_STILL_RINGS;
+        }
     }
 
 
