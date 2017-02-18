@@ -41,7 +41,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
         Log.v(LOT_TAG, "Created the event.db table.");
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_PETS_TABLE);
-        Log.v(LOT_TAG, "Execute SQL statement.");
+        Log.v(LOT_TAG, "Executed SQL statement.");
     }
 
     /**

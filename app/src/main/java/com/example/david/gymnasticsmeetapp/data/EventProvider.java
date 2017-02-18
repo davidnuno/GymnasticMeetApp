@@ -58,12 +58,12 @@ public class EventProvider extends ContentProvider {
     /**
      * An {@link EventDbHelper} object is created the database.
      */
-    private EventDbHelper eventDbHelper;
+    private EventDbHelper mDbHelper;
 
     @Override
     public boolean onCreate() {
 
-        eventDbHelper = new EventDbHelper(getContext());
+        mDbHelper = new EventDbHelper(getContext());
         Log.v(LOG_TAG, "Created a new EventDbHelper Object.");
 
         return false;
@@ -74,14 +74,16 @@ public class EventProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
-        SQLiteDatabase database = eventDbHelper.getReadableDatabase();
+        Log.v(LOG_TAG, "query()");
+        SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
         // This cursor will hold the result of the query
-        Cursor cursor = null;
+        Cursor cursor;
 
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
 
+        Log.v(LOG_TAG, "Checking the switch statement for single data or multiple.");
         switch (match) {
 
             case EVENTS:
@@ -125,18 +127,22 @@ public class EventProvider extends ContentProvider {
         return cursor;
     }
 
-    @Nullable
     @Override
     public String getType(Uri uri) {
         return null;
     }
 
-    @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
 
-
-        return null;
+        Log.v(LOG_TAG, "insert()");
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case EVENTS:
+                return insertEvent(uri, contentValues);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
     }
 
     /**
@@ -145,11 +151,11 @@ public class EventProvider extends ContentProvider {
      */
     private Uri insertEvent(Uri uri, ContentValues values) {
 
-        String name = values.getAsString(EventContract.EventEntry.COLUMN_EVENT_NAME);
+        //String name = values.getAsString(EventContract.EventEntry.COLUMN_EVENT_NAME);
 
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-        SQLiteDatabase database = eventDbHelper.getWritableDatabase();
-
+        Log.v(LOG_TAG, "insertEvent(): Inserting event");
         // Insert the new pet with the given values
         long id = database.insert(EventContract.EventEntry.TABLE_NAME, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.

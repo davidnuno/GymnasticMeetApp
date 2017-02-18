@@ -18,6 +18,8 @@ import android.widget.ListView;
 
 import com.example.david.gymnasticsmeetapp.data.EventContract;
 
+import static android.R.attr.id;
+
 public class MeetCatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /**
@@ -73,6 +75,11 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
         values.put(EventContract.EventEntry.COLUMN_EVENT_TYPE, 1);
         values.put(EventContract.EventEntry.COLUMN_EVENT_DETAILS, "The event details");
 
+        // Insert a new row for Toto into the provider using the ContentResolver.
+        // Use the {@link EventEntry#CONTENT_URI} to indicate that we want to insert
+        // into the pets database table.
+        // Receive the new content URI that will allow us to access new Events data in the future.
+        Log.v(LOG_TAG, "Launching ContentResolver().insert()");
         Uri uri = getContentResolver().insert(EventContract.EventEntry.CONTENT_URI, values);
     }
 
@@ -88,19 +95,21 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            //noinspection SimplifiableIfStatement
+            case R.id.action_settings:
+                insertEvent();
+
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
+        Log.v(LOG_TAG, "onCreateLoader");
+        // This loader will execute the ContentProvider's query method on a background thread
         String[] projection = {
                 EventContract.EventEntry._ID,
                 EventContract.EventEntry.COLUMN_EVENT_NAME,
@@ -118,6 +127,7 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        Log.v(LOG_TAG, "onLoadFinished");
         mCursorAdapter.swapCursor(data);
     }
 

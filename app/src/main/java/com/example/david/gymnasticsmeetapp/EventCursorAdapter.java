@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.david.gymnasticsmeetapp.data.EventContract;
-import com.example.david.gymnasticsmeetapp.data.EventProvider;
 
 /**
  * Created by David on 2/13/2017.
@@ -68,6 +67,5 @@ public class EventCursorAdapter extends CursorAdapter {
         Log.v(LOG_TAG, "Setting the text for TextViews.");
         tvEventName.setText(eventName);
         tvEventDetails.setText(eventDetails);
-
     }
 }
