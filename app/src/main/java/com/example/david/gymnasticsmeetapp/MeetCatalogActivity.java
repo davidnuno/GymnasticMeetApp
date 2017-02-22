@@ -3,12 +3,12 @@ package com.example.david.gymnasticsmeetapp;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,8 +17,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.example.david.gymnasticsmeetapp.data.EventContract;
-
-import static android.R.attr.id;
 
 public class MeetCatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -48,8 +46,10 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                Intent intent = new Intent(MeetCatalogActivity.this, EditorActivity.class);
+                Log.v(LOG_TAG, "Launching EditorActivity intent");
+                startActivity(intent);
             }
         });
 

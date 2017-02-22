@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <!-- Overview category -->
     <LinearLayout
@@ -13,38 +14,58 @@
         <!-- Label -->
         <TextView
             style="@style/CategoryStyle"
-            android:text="overview" />
+            android:text="@string/category_overview" />
 
+        <!-- Input fields -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="4dp">
+            android:layout_weight="2"
+            android:orientation="vertical">
 
+            <!-- Name field -->
             <EditText
-                android:layout_width="wrap_content"
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name"
+                android:hint="@string/name"
                 android:inputType="textCapWords" />
 
+            <!-- Details field -->
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Details" />
+                android:hint="@string/category_details" />
+
         </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Type category -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/category_type" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
 
             <Spinner
+                android:id="@+id/spinner_event"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown">
-
             </Spinner>
 
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

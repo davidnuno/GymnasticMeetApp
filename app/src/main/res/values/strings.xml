@@ -4,4 +4,16 @@
     <string name="action_remove_all_events">Remove all events</string>
 
     <string name="insert_new_event">Insert event</string>
+
+    <string name="name">Name</string>
+
+    <!-- Category label for overview-->
+    <string name="category_overview">Overview</string>
+
+    <!-- Category label for details-->
+    <string name="category_details">Details</string>
+
+    <!-- Category label for type -->
+    <string name="category_type">Type</string>
+
 </resources>

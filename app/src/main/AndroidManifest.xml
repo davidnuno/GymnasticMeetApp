@@ -18,6 +18,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.example.david.gymnasticsmeetapp.EditorActivity"
+            android:label="Edit Event">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MeetCatalogActivity" />
+        </activity>
+
         <provider
             android:name=".data.EventProvider"
             android:authorities="com.example.david.gymnasticsmeetapp"
