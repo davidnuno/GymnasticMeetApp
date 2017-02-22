@@ -10,7 +10,6 @@
         android:id="@+id/event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:textAppearance="?android:textAppearanceMedium"
         tools:text="Event Name" />
 
@@ -18,7 +17,6 @@
         android:id="@+id/event_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:textAppearance="?android:textAppearanceSmall"
         tools:text="Event Details" />
 </LinearLayout>

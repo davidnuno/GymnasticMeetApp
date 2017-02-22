@@ -13,7 +13,7 @@ import com.example.david.gymnasticsmeetapp.MeetCatalogActivity;
 
 public class EventDbHelper extends SQLiteOpenHelper {
 
-    private static final String LOT_TAG = "Steps =>" + EventDbHelper.class.getSimpleName();
+    private static final String LOT_TAG = "Steps => " + EventDbHelper.class.getSimpleName();
 
     /** The database name. */
     private final static String DATABASE_NAME = "events.db";

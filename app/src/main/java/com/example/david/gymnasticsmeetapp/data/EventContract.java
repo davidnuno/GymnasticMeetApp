@@ -12,7 +12,7 @@ import static android.text.style.TtsSpan.GENDER_MALE;
 
 public class EventContract {
 
-    public static final String CONTENT_AUTHORITY = "com.example.android.gymnasticsmeetapp";
+    public static final String CONTENT_AUTHORITY = "com.example.david.gymnasticsmeetapp";
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 

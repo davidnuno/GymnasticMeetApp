@@ -56,17 +56,19 @@ public class EventProvider extends ContentProvider {
     }
 
     /**
-     * An {@link EventDbHelper} object is created the database.
+     * An {@link EventDbHelper} object to connect to the database.
      */
     private EventDbHelper mDbHelper;
 
     @Override
     public boolean onCreate() {
 
+        // Make sure the variable is a global variable, so it can be referenced from other
+        // ContentProvider methods.
         mDbHelper = new EventDbHelper(getContext());
         Log.v(LOG_TAG, "Created a new EventDbHelper Object.");
 
-        return false;
+        return true;
     }
 
     @Nullable
@@ -163,7 +165,6 @@ public class EventProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
-
         return null;
     }
 
@@ -173,7 +174,43 @@ public class EventProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
-        return 0;
+    public int update(Uri uri, ContentValues contentValues, String selection,
+                      String[] selectionArgs) {
+
+        final int match = sUriMatcher.match(uri);
+
+        switch (match) {
+            case EVENTS:
+                return updateEvent(uri, contentValues, selection, selectionArgs);
+            case EVENT_ID:
+                selection = EventContract.EventEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateEvent(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Update pets in the database with the given content values. Apply the changes to the rows
+     * specified in the selection and selection arguments (which could be 0 or 1 or more pets).
+     * Return the number of rows that were successfully updated.
+     */
+    private int updateEvent(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        // Otherwise, get writeable database to update the data
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Perform the update on the database and get the number of rows affected
+        int rowsUpdated = database.update(EventContract.EventEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        // If 1 or more rows were updated, then notify all listeners that the data at the
+        // given URI has changed
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        // Returns the number of database rows affected by the update statement
+        return rowsUpdated;
     }
 }
