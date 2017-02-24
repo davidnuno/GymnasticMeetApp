@@ -16,4 +16,7 @@
     <!-- Category label for type -->
     <string name="category_type">Type</string>
 
+    <!-- Save button-->
+    <string name="button_save">SAVE</string>
+
 </resources>

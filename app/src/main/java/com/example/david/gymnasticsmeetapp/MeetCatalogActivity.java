@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.david.gymnasticsmeetapp.data.EventContract;
@@ -61,6 +62,16 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
 
         Log.v(LOG_TAG, "Setting the adapter to the ListView");
         eventList.setAdapter(mCursorAdapter);
+
+        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Intent intent = new Intent(MeetCatalogActivity.this, EditorActivity.class);
+                Log.v(LOG_TAG, "Launching EditorActivity intent");
+                startActivity(intent);
+            }
+        });
 
         Log.v(LOG_TAG, "Kicking off loader.");
         //Kick off the loader
