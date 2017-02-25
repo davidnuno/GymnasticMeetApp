@@ -1,6 +1,7 @@
 package com.example.david.gymnasticsmeetapp;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -18,6 +19,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.david.gymnasticsmeetapp.data.EventContract;
+
+import static android.R.attr.id;
 
 public class MeetCatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -49,6 +52,9 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
             public void onClick(View view) {
 
                 Intent intent = new Intent(MeetCatalogActivity.this, EditorActivity.class);
+                Uri currentEventUri = ContentUris.withAppendedId(EventContract.EventEntry.CONTENT_URI, id);
+
+                intent.setData(currentEventUri);
                 Log.v(LOG_TAG, "Launching EditorActivity intent");
                 startActivity(intent);
             }
@@ -92,6 +98,7 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
         // Receive the new content URI that will allow us to access new Events data in the future.
         Log.v(LOG_TAG, "Launching ContentResolver().insert()");
         Uri uri = getContentResolver().insert(EventContract.EventEntry.CONTENT_URI, values);
+
     }
 
     @Override

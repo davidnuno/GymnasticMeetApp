@@ -165,6 +165,10 @@ public class EventProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
+
+        //Refresh after inserting data to database.
+        getContext().getContentResolver().notifyChange(uri, null);
+
         return null;
     }
 

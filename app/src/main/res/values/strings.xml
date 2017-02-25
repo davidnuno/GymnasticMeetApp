@@ -19,4 +19,9 @@
     <!-- Save button-->
     <string name="button_save">SAVE</string>
 
+    <!-- Editor Activity name when adding new event -->
+    <string name="editor_activity_title_new_event">Add event</string>
+
+    <!-- Editor Activity name when editing an event -->
+    <string name="editor_activity_title_edit_event">Edit event</string>
 </resources>

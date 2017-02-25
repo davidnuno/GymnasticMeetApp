@@ -18,11 +18,17 @@ public class EventContract {
 
     public static final String PATH_EVENTS = "events";
 
+    //For the competitor table
+    public static final String PATH_COMPETITOR = "competitor";
+
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
     private EventContract(){}
 
     public static final class EventEntry implements BaseColumns {
+
+        //For the competitor table
+        public static final String TABLE_NAME_COMPETITOR = "competitor";
 
         public static final String TABLE_NAME = "events";
 

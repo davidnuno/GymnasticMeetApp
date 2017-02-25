@@ -31,6 +31,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         // Create a String that contains the SQL statement to create the pets table
         String SQL_CREATE_PETS_TABLE = "CREATE TABLE " + EventContract.EventEntry.TABLE_NAME + " ("
                 + EventContract.EventEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
