@@ -41,22 +41,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      */
     private final int EXISTING_EVENT = 0;
 
-    /**
-     * The save {@link Button}
-     */
+    /** The save {@link Button} */
     Button saveButton;
-    /**
-     * EditText field to enter the events name
-     */
+
+    /** EditText field to enter the events name */
     EditText mNameEditText;
-    /**
-     * EditText field to enter the events details
-     */
+
+    /** EditText field to enter the events details */
     EditText mDetailsEditText;
-    /**
-     * Content URI for the existing event (null if it's a new event)
-     */
+
+    /** Content URI for the existing event (null if it's a new event) */
     private Uri mCurrentEventUri;
+
     /** EditText field to enter the event type */
     private Spinner mEventSpinner;
 
@@ -82,8 +78,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         // Find all relevant views that we will need to read user input from
-        mNameEditText = (EditText) findViewById(R.id.event_name);
-        mDetailsEditText = (EditText) findViewById(R.id.event_details);
+        mNameEditText       = (EditText) findViewById(R.id.event_name);
+        mDetailsEditText    = (EditText) findViewById(R.id.event_details);
 
         saveButton = (Button) findViewById(R.id.button_save);
 
@@ -132,7 +128,42 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //Bail early if the cursor is null or there is less than 1 row in the cursor
+        if (data == null || data.getCount() < 1) {
+            return;
+        }
 
+        if(data.moveToFirst()) {
+            int nameColumnIndex     = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_NAME);
+            int detailsColumnIndex  = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_DETAILS);
+            int typeColumnIndex     = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_TYPE);
+
+            String name     = data.getString(nameColumnIndex);
+            String details  = data.getString(detailsColumnIndex);
+            int type        = data.getInt(typeColumnIndex);
+
+            //Update the views on the screen with the values from the database.
+            mNameEditText.setText(name);
+            mDetailsEditText.setText(details);
+
+            switch (type) {
+                case EventContract.EventEntry.EVENT_BALANCE_BEAM:
+                    mEventSpinner.setSelection(1);
+                    break;
+                case EventContract.EventEntry.EVENT_FLOOR_EX:
+                    mEventSpinner.setSelection(2);
+                    break;
+                case EventContract.EventEntry.EVENT_POMMEL_HORSE:
+                    mEventSpinner.setSelection(3);
+                    break;
+                case EventContract.EventEntry.EVENT_STILL_RINGS:
+                    mEventSpinner.setSelection(4);
+                    break;
+                case EventContract.EventEntry.EVENT_OTHER:
+                    mEventSpinner.setSelection(0);
+                    break;
+            }
+        }
     }
 
     @Override

@@ -70,11 +70,11 @@ public class EventContract {
         /**
          * Possible values for the gender of the pet.
          */
-        public static int EVENT_OTHER = 0;
-        public static int EVENT_BALANCE_BEAM = 1;
-        public static int EVENT_FLOOR_EX = 2;
-        public static int EVENT_POMMEL_HORSE = 3;
-        public static int EVENT_STILL_RINGS = 4;
+        public static final int EVENT_OTHER = 0;
+        public static final int EVENT_BALANCE_BEAM = 1;
+        public static final int EVENT_FLOOR_EX = 2;
+        public static final int EVENT_POMMEL_HORSE = 3;
+        public static final int EVENT_STILL_RINGS = 4;
 
         /**
          * Returns whether or not the given event is {@link #EVENT_OTHER}, {@link #EVENT_BALANCE_BEAM},
