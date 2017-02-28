@@ -1,33 +1,30 @@
 package com.example.david.gymnasticsmeetapp;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.app.LoaderManager;
 
 import com.example.david.gymnasticsmeetapp.data.EventContract;
+
+import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.EVENT_BALANCE_BEAM;
+import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.EVENT_FLOOR_EX;
+import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.EVENT_OTHER;
+import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.EVENT_POMMEL_HORSE;
+import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.EVENT_STILL_RINGS;
 
 /**
  * Created by David on 2/22/2017.
@@ -56,6 +53,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     /** EditText field to enter the event type */
     private Spinner mEventSpinner;
 
+    /**
+     * Type of event. The possible values are:
+     * 0 for other, 1 for , 2 for , 3 for ,
+     * 4 for , 5 for .
+     */
+    private int mEventType;
+
 
 
     @Override
@@ -78,19 +82,44 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         // Find all relevant views that we will need to read user input from
-        mNameEditText       = (EditText) findViewById(R.id.event_name);
-        mDetailsEditText    = (EditText) findViewById(R.id.event_details);
+        mNameEditText = (EditText) findViewById(R.id.event_editor_name);
+        mDetailsEditText = (EditText) findViewById(R.id.event_editor_details);
 
         saveButton = (Button) findViewById(R.id.button_save);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(EditorActivity.this, "You clicked the save button",
-                        Toast.LENGTH_LONG).show();
+                saveEvent();
             }
         });
+
         mEventSpinner = (Spinner) findViewById(R.id.spinner_event);
+
         setupSpinner();
+    }
+
+    private void saveEvent() {
+
+        String nameString = mNameEditText.getText().toString().trim();
+        String detailsString = mDetailsEditText.getText().toString().trim();
+
+        ContentValues values = new ContentValues();
+        values.put(EventContract.EventEntry.COLUMN_EVENT_NAME, nameString);
+        values.put(EventContract.EventEntry.COLUMN_EVENT_DETAILS, detailsString);
+        values.put(EventContract.EventEntry.COLUMN_EVENT_TYPE, mEventType);
+
+        Uri newUri = getContentResolver().insert(EventContract.EventEntry.CONTENT_URI, values);
+
+        // Show a toast message depending on whether or not the insertion was successful
+        if (newUri == null) {
+            // If the new content URI is null, then there was an error with insertion.
+            Toast.makeText(this, getString(R.string.editor_insert_event_failed),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the insertion was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_insert_event_successful),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -105,6 +134,34 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         mEventSpinner.setAdapter(eventSpinnerAdapter);
 
+        mEventSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
+
+                String selection = (String) parent.getItemAtPosition(position);
+
+                if (!TextUtils.isEmpty(selection)) {
+                    if (selection.equals(getString(R.string.event_still_rings))) {
+                        mEventType = EVENT_STILL_RINGS;
+                    } else if (selection.equals(getString(R.string.event_balance_beam))) {
+                        mEventType = EVENT_BALANCE_BEAM;
+                    } else if (selection.equals(getString(R.string.event_floor_excecise))) {
+                        mEventType = EVENT_FLOOR_EX;
+                    } else if (selection.equals(getString(R.string.event_pommel_horse))) {
+                        mEventType = EVENT_POMMEL_HORSE;
+                    } else {
+                        mEventType = EVENT_OTHER; // Other
+                    }
+                }
+            }
+
+            // Because AdapterView is an abstract class, onNothingSelected must be defined
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                mEventType = 0; // Other
+            }
+        });
     }
 
     @Override
@@ -147,19 +204,19 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mDetailsEditText.setText(details);
 
             switch (type) {
-                case EventContract.EventEntry.EVENT_BALANCE_BEAM:
+                case EVENT_BALANCE_BEAM:
                     mEventSpinner.setSelection(1);
                     break;
-                case EventContract.EventEntry.EVENT_FLOOR_EX:
+                case EVENT_FLOOR_EX:
                     mEventSpinner.setSelection(2);
                     break;
-                case EventContract.EventEntry.EVENT_POMMEL_HORSE:
+                case EVENT_POMMEL_HORSE:
                     mEventSpinner.setSelection(3);
                     break;
-                case EventContract.EventEntry.EVENT_STILL_RINGS:
+                case EVENT_STILL_RINGS:
                     mEventSpinner.setSelection(4);
                     break;
-                case EventContract.EventEntry.EVENT_OTHER:
+                case EVENT_OTHER:
                     mEventSpinner.setSelection(0);
                     break;
             }
@@ -169,8 +226,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
-        mNameEditText.setText("");
+        /*mNameEditText.setText("");
         mDetailsEditText.setText("");
-        mEventSpinner.setSelection(0); //Select "Other" event
+        mEventSpinner.setSelection(0); //Select "Other" event*/
     }
 }

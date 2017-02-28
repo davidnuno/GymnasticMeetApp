@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Gymnastics Meet App</string>
 
-    <string name="action_remove_all_events">Remove all events</string>
+    <string name="remove_all_events">Remove all events</string>
 
     <string name="insert_new_event">Insert event</string>
 
@@ -24,4 +24,21 @@
 
     <!-- Editor Activity name when editing an event -->
     <string name="editor_activity_title_edit_event">Edit event</string>
+
+    <!-- Toast message in editor when new event has failed to be inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_event_failed">Error with saving event</string>
+
+    <!-- Toast message in editor when new event has been successfully inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_event_successful">Event saved</string>
+
+    <string name="event_other">Other</string>
+
+    <string name="event_balance_beam">Balance Beam</string>
+
+    <string name="event_floor_excecise">Floor Exercise</string>
+
+    <string name="event_pommel_horse">Pommel Horse</string>
+
+    <string name="event_still_rings">Still Rings</string>
+
 </resources>

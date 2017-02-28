@@ -116,11 +116,21 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
         switch (item.getItemId()) {
 
             //noinspection SimplifiableIfStatement
-            case R.id.action_settings:
+            case R.id.action_insert_new_event:
                 insertEvent();
-
+                break;
+            case R.id.action_remove_all_events:
+                deleteAllEvents();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Helper method to delete all pets in the database.
+     */
+    private void deleteAllEvents() {
+        int rowsDeleted = getContentResolver().delete(EventContract.EventEntry.CONTENT_URI, null, null);
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from events database");
     }
 
     @Override
