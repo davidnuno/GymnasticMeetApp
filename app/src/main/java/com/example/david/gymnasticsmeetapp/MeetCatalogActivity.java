@@ -17,9 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.david.gymnasticsmeetapp.data.EventContract;
 
+import static android.R.attr.duration;
 import static android.R.attr.id;
 
 public class MeetCatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -61,15 +63,19 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
         });
 
         //Find the ListVew to populate event data.
-        ListView eventList = (ListView) findViewById(R.id.list);
+        ListView eventListView = (ListView) findViewById(R.id.list);
+
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
+        View emptyView = findViewById(R.id.empty_view);
+        eventListView.setEmptyView(emptyView);
 
         Log.v(LOG_TAG, "Creating CursosrAdapter");
         mCursorAdapter = new EventCursorAdapter(this, null);
 
         Log.v(LOG_TAG, "Setting the adapter to the ListView");
-        eventList.setAdapter(mCursorAdapter);
+        eventListView.setAdapter(mCursorAdapter);
 
-        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -118,9 +124,10 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
             //noinspection SimplifiableIfStatement
             case R.id.action_insert_new_event:
                 insertEvent();
-                break;
+                return true;
             case R.id.action_remove_all_events:
                 deleteAllEvents();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -130,6 +137,9 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
      */
     private void deleteAllEvents() {
         int rowsDeleted = getContentResolver().delete(EventContract.EventEntry.CONTENT_URI, null, null);
+
+        Toast.makeText(this, "Removed all events.", Toast.LENGTH_SHORT).show();
+
         Log.v("CatalogActivity", rowsDeleted + " rows deleted from events database");
     }
 

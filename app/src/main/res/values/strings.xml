@@ -31,14 +31,6 @@
     <!-- Toast message in editor when new event has been successfully inserted [CHAR LIMIT=NONE] -->
     <string name="editor_insert_event_successful">Event saved</string>
 
-    <string name="event_other">Other</string>
-
-    <string name="event_balance_beam">Balance Beam</string>
-
-    <string name="event_floor_excecise">Floor Exercise</string>
-
-    <string name="event_pommel_horse">Pommel Horse</string>
-
-    <string name="event_still_rings">Still Rings</string>
+    <string name="empty_view_title_text">There are currenlty no events</string>
 
 </resources>

@@ -11,6 +11,14 @@ import android.widget.TextView;
 
 import com.example.david.gymnasticsmeetapp.data.EventContract;
 
+import static android.R.attr.defaultHeight;
+import static android.R.attr.type;
+import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.EVENT_BALANCE_BEAM;
+import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.EVENT_FLOOR_EX;
+import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.EVENT_OTHER;
+import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.EVENT_POMMEL_HORSE;
+import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.EVENT_STILL_RINGS;
+
 /**
  * Created by David on 2/13/2017.
  */
@@ -57,15 +65,53 @@ public class EventCursorAdapter extends CursorAdapter {
 
         TextView tvEventName = (TextView) view.findViewById(R.id.event_name);
         TextView tvEventDetails = (TextView) view.findViewById(R.id.event_details);
+        TextView tvEventType = (TextView) view.findViewById(R.id.event_type);
 
         int name = cursor.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_NAME);
         int details = cursor.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_DETAILS);
+        int type = cursor.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_TYPE);
 
         String eventName = cursor.getString(name);
         String eventDetails = cursor.getString(details);
+        int eventType = cursor.getInt(type);
 
         Log.v(LOG_TAG, "Setting the text for TextViews.");
         tvEventName.setText(eventName);
         tvEventDetails.setText(eventDetails);
+        tvEventType.setText(determineEventType(eventType));
+    }
+
+    /**
+     * This method determines the event type based on the int.
+     *
+     * @param event the type of event as an integer
+     * @return the {@link String} event.
+     */
+    private String determineEventType(int event) {
+
+        //String to hold the event type
+        String type = "";
+
+        switch (event) {
+
+            case EVENT_OTHER:
+                type = "Event Other";
+                break;
+            case EVENT_BALANCE_BEAM:
+                type = "Balance Beam";
+                break;
+            case EVENT_FLOOR_EX:
+                type = "Floor Exercise";
+                break;
+            case EVENT_POMMEL_HORSE:
+                type = "Pommel Horse";
+                break;
+            case EVENT_STILL_RINGS:
+                type = "Still Rings";
+                break;
+        }
+
+        //Return the type of event
+        return type;
     }
 }
