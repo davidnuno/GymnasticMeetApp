@@ -36,7 +36,7 @@
                 android:id="@+id/event_editor_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/category_details" />
+                android:hint="@string/category_date" />
 
         </LinearLayout>
 

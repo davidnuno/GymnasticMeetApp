@@ -68,7 +68,7 @@ public class EventCursorAdapter extends CursorAdapter {
         TextView tvEventType = (TextView) view.findViewById(R.id.event_type);
 
         int name = cursor.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_NAME);
-        int details = cursor.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_DETAILS);
+        int details = cursor.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_DATE);
         int type = cursor.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_TYPE);
 
         String eventName = cursor.getString(name);

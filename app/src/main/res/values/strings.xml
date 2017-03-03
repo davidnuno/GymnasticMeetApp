@@ -10,8 +10,8 @@
     <!-- Category label for overview-->
     <string name="category_overview">Overview</string>
 
-    <!-- Category label for details-->
-    <string name="category_details">Details</string>
+    <!-- Category label for date-->
+    <string name="category_date">Date</string>
 
     <!-- Category label for type -->
     <string name="category_type">Type</string>
@@ -31,6 +31,27 @@
     <!-- Toast message in editor when new event has been successfully inserted [CHAR LIMIT=NONE] -->
     <string name="editor_insert_event_successful">Event saved</string>
 
-    <string name="empty_view_title_text">There are currenlty no events</string>
+    <!-- Empty title text when no events [CHAR LIMIT=NONE] -->
+    <string name="empty_view_title_text">There are currently no events</string>
 
+    <!-- Event type for Still Ring [CHAR LIMIT=NONE] -->
+    <string name="event_still_rings">Still Rings</string>
+
+    <!-- Event type for Balance Beam [CHAR LIMIT=NONE] -->
+    <string name="event_balance_beam">Balance Beam</string>
+
+    <!-- Event type for Floor Exercise [CHAR LIMIT=NONE] -->
+    <string name="event_floor_exercise">Floor exercise</string>
+
+    <!-- Event type for Pommel Horse [CHAR LIMIT=NONE] -->
+    <string name="event_pommel_horse">Pommel Horse</string>
+
+    <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+
+    <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
+    <string name="discard">Discard</string>
+
+    <!-- Dialog button text for the option to keep editing the current pet [CHAR LIMIT=20] -->
+    <string name="keep_editing">Keep Editing</string>
 </resources>

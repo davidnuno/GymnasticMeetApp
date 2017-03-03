@@ -96,7 +96,7 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
 
         values.put(EventContract.EventEntry.COLUMN_EVENT_NAME, "Pole Vault");
         values.put(EventContract.EventEntry.COLUMN_EVENT_TYPE, 1);
-        values.put(EventContract.EventEntry.COLUMN_EVENT_DETAILS, "The event details");
+        values.put(EventContract.EventEntry.COLUMN_EVENT_DATE, "The event details");
 
         // Insert a new row for Toto into the provider using the ContentResolver.
         // Use the {@link EventEntry#CONTENT_URI} to indicate that we want to insert
@@ -152,7 +152,7 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
                 EventContract.EventEntry._ID,
                 EventContract.EventEntry.COLUMN_EVENT_NAME,
                 EventContract.EventEntry.COLUMN_EVENT_TYPE,
-                EventContract.EventEntry.COLUMN_EVENT_DETAILS};
+                EventContract.EventEntry.COLUMN_EVENT_DATE};
 
         return new CursorLoader(this,
                 EventContract.EventEntry.CONTENT_URI,

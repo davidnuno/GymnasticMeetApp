@@ -37,7 +37,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
                 + EventContract.EventEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + EventContract.EventEntry.COLUMN_EVENT_NAME + " TEXT NOT NULL, "
                 + EventContract.EventEntry.COLUMN_EVENT_TYPE + " INTEGER, "
-                + EventContract.EventEntry.COLUMN_EVENT_DETAILS + " TEXT);";
+                + EventContract.EventEntry.COLUMN_EVENT_DATE + " TEXT);";
 
         Log.v(LOT_TAG, "Created the event.db table.");
         // Execute the SQL statement

@@ -61,11 +61,11 @@ public class EventContract {
          */
         public static final String COLUMN_EVENT_TYPE = "eventType";
 
-        /** The event details column for the event table.
+        /** The event date column for the event table.
          *
          * Type: TEXT
          */
-        public static final String COLUMN_EVENT_DETAILS = "eventDetails";
+        public static final String COLUMN_EVENT_DATE = "eventDate";
 
         /**
          * Possible values for the gender of the pet.

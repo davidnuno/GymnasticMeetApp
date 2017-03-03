@@ -2,13 +2,16 @@ package com.example.david.gymnasticsmeetapp;
 
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -60,7 +63,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      */
     private int mEventType;
 
+    /**
+     * Has Event changed
+     */
+    private boolean mEventHasChanged = false;
 
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mEventHasChanged = true;
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -84,7 +98,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Find all relevant views that we will need to read user input from
         mNameEditText = (EditText) findViewById(R.id.event_editor_name);
         mDetailsEditText = (EditText) findViewById(R.id.event_editor_details);
+        mEventSpinner = (Spinner) findViewById(R.id.spinner_event);
 
+        mNameEditText.setOnTouchListener(mTouchListener);
+        mDetailsEditText.setOnTouchListener(mTouchListener);
+        mEventSpinner.setOnTouchListener(mTouchListener);
+
+        //Setup the Save button to save the event.
         saveButton = (Button) findViewById(R.id.button_save);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -93,9 +113,55 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
 
-        mEventSpinner = (Spinner) findViewById(R.id.spinner_event);
-
         setupSpinner();
+    }
+
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    @Override
+    public void onBackPressed() {
+
+        if (!mEventHasChanged) {
+            super.onBackPressed();
+            return;
+        }
+
+        // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+        // Create a click listener to handle the user confirming that changes should be discarded.
+        DialogInterface.OnClickListener discardButtonClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                };
+
+        showUnsavedChangesDialog(discardButtonClickListener);
+    }
+
+    private void showUnsavedChangesDialog(
+            DialogInterface.OnClickListener discardButtonClickListener) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.unsaved_changes_dialog_msg);
+        builder.setPositiveButton(R.string.discard, discardButtonClickListener);
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Keep editing" button, so dismiss the dialog
+                // and continue editing the event.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void saveEvent() {
@@ -103,22 +169,44 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String nameString = mNameEditText.getText().toString().trim();
         String detailsString = mDetailsEditText.getText().toString().trim();
 
+        // Check if this is supposed to be a new event
+        // and check if all the fields in the editor are blank
+        if (mCurrentEventUri == null &&
+                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(detailsString)){return;}
+
         ContentValues values = new ContentValues();
         values.put(EventContract.EventEntry.COLUMN_EVENT_NAME, nameString);
-        values.put(EventContract.EventEntry.COLUMN_EVENT_DETAILS, detailsString);
+        values.put(EventContract.EventEntry.COLUMN_EVENT_DATE, detailsString);
         values.put(EventContract.EventEntry.COLUMN_EVENT_TYPE, mEventType);
 
-        Uri newUri = getContentResolver().insert(EventContract.EventEntry.CONTENT_URI, values);
+        if (mCurrentEventUri == null) {
 
-        // Show a toast message depending on whether or not the insertion was successful
-        if (newUri == null) {
+            // Insert a new pet into the provider, returning the content URI for the new pet.
+            Uri newUri = getContentResolver().insert(EventContract.EventEntry.CONTENT_URI, values);
+
             // If the new content URI is null, then there was an error with insertion.
-            Toast.makeText(this, getString(R.string.editor_insert_event_failed),
-                    Toast.LENGTH_SHORT).show();
+            if (newUri == null) {
+                // Show a toast message depending on whether or not the insertion was successful
+                Toast.makeText(this, getString(R.string.editor_insert_event_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_insert_event_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
         } else {
-            // Otherwise, the insertion was successful and we can display a toast.
-            Toast.makeText(this, getString(R.string.editor_insert_event_successful),
-                    Toast.LENGTH_SHORT).show();
+            // Otherwise this is an EXISTING event, so update the pet with content URI: mCurrentEventUri
+            // and pass in the new ContentValues. Pass in null for the selection and selection args
+            // because mCurrentEventUri will already identify the correct row in the database that
+            // we want to modify.
+            int rowsAffected = getContentResolver().update(mCurrentEventUri, values, null, null);
+
+            if (rowsAffected == 0) {
+
+                Toast.makeText(this, "Error with updating event", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Event updated", Toast.LENGTH_SHORT);
+            }
         }
     }
 
@@ -145,7 +233,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                         mEventType = EVENT_STILL_RINGS;
                     } else if (selection.equals(getString(R.string.event_balance_beam))) {
                         mEventType = EVENT_BALANCE_BEAM;
-                    } else if (selection.equals(getString(R.string.event_floor_excecise))) {
+                    } else if (selection.equals(getString(R.string.event_floor_exercise))) {
                         mEventType = EVENT_FLOOR_EX;
                     } else if (selection.equals(getString(R.string.event_pommel_horse))) {
                         mEventType = EVENT_POMMEL_HORSE;
@@ -171,7 +259,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String[] projection = {
                 EventContract.EventEntry._ID,
                 EventContract.EventEntry.COLUMN_EVENT_NAME,
-                EventContract.EventEntry.COLUMN_EVENT_DETAILS,
+                EventContract.EventEntry.COLUMN_EVENT_DATE,
                 EventContract.EventEntry.COLUMN_EVENT_TYPE};
 
         // This loader will execute the ContentProvider's query method on a background thread
@@ -192,7 +280,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         if(data.moveToFirst()) {
             int nameColumnIndex     = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_NAME);
-            int detailsColumnIndex  = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_DETAILS);
+            int detailsColumnIndex = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_DATE);
             int typeColumnIndex     = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_TYPE);
 
             String name     = data.getString(nameColumnIndex);
