@@ -169,7 +169,7 @@ public class EventProvider extends ContentProvider {
         //Refresh after inserting data to database.
         getContext().getContentResolver().notifyChange(uri, null);
 
-        return null;
+        return ContentUris.withAppendedId(uri, id);
     }
 
     @Override

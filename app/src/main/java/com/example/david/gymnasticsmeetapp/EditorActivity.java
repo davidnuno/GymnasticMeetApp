@@ -193,7 +193,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Show a toast message depending on whether or not the insertion was successful
             if (newUri == null) {
                 Log.v(LOG_TAG, "Error with saving event" + newUri);
-                // Show a toast message depending on whether or not the insertion was successful
+                // Show a toast message depending on whether or not the insertion was successful.
+                //"Error with saving event"
                 Toast.makeText(this, getString(R.string.editor_insert_event_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
