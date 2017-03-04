@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,6 +36,8 @@ import static com.example.david.gymnasticsmeetapp.data.EventContract.EventEntry.
 
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private final static String LOG_TAG = "Steps => " + EditorActivity.class.getSimpleName();
 
     /**
      * Identifier for the existing event data
@@ -87,9 +90,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         if (mCurrentEventUri == null) {
 
+            //If new Event set the screen title to New Event.
             setTitle(R.string.editor_activity_title_new_event);
         } else {
 
+            //If existing Event set the screen title to Edit Event.
             setTitle(R.string.editor_activity_title_edit_event);
 
             getLoaderManager().initLoader(EXISTING_EVENT, null, this);
@@ -110,6 +115,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 saveEvent();
+                finish();
             }
         });
 
@@ -181,11 +187,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         if (mCurrentEventUri == null) {
 
-            // Insert a new pet into the provider, returning the content URI for the new pet.
+            // Insert a new event into the provider, returning the content URI for the new event.
             Uri newUri = getContentResolver().insert(EventContract.EventEntry.CONTENT_URI, values);
 
-            // If the new content URI is null, then there was an error with insertion.
+            // Show a toast message depending on whether or not the insertion was successful
             if (newUri == null) {
+                Log.v(LOG_TAG, "Error with saving event" + newUri);
                 // Show a toast message depending on whether or not the insertion was successful
                 Toast.makeText(this, getString(R.string.editor_insert_event_failed),
                         Toast.LENGTH_SHORT).show();
@@ -201,11 +208,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // we want to modify.
             int rowsAffected = getContentResolver().update(mCurrentEventUri, values, null, null);
 
+            // Show a toast message depending on whether or not the update was successful.
             if (rowsAffected == 0) {
-
+                //If no rows were affected, then there was an error with the update.
                 Toast.makeText(this, "Error with updating event", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Event updated", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Event updated", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -279,17 +287,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         if(data.moveToFirst()) {
-            int nameColumnIndex     = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_NAME);
-            int detailsColumnIndex = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_DATE);
-            int typeColumnIndex     = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_TYPE);
+            int nameColumnIndex = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_NAME);
+            int dateColumnIndex = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_DATE);
+            int typeColumnIndex = data.getColumnIndex(EventContract.EventEntry.COLUMN_EVENT_TYPE);
 
-            String name     = data.getString(nameColumnIndex);
-            String details  = data.getString(detailsColumnIndex);
-            int type        = data.getInt(typeColumnIndex);
+            //Extract out the value from the Cursor for the given index
+            String name = data.getString(nameColumnIndex);
+            String date = data.getString(dateColumnIndex);
+            int type = data.getInt(typeColumnIndex);
 
             //Update the views on the screen with the values from the database.
             mNameEditText.setText(name);
-            mDetailsEditText.setText(details);
+            mDetailsEditText.setText(date);
 
             switch (type) {
                 case EVENT_BALANCE_BEAM:
@@ -314,8 +323,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
-        /*mNameEditText.setText("");
+        Log.v(LOG_TAG, "onLoaderReset");
+        mNameEditText.setText("");
         mDetailsEditText.setText("");
-        mEventSpinner.setSelection(0); //Select "Other" event*/
+        mEventSpinner.setSelection(0); //Select "Other" event
     }
 }

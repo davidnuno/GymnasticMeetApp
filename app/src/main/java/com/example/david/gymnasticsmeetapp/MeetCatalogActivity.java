@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.example.david.gymnasticsmeetapp.data.EventContract;
 
-import static android.R.attr.duration;
 import static android.R.attr.id;
 
 public class MeetCatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -54,9 +53,7 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
             public void onClick(View view) {
 
                 Intent intent = new Intent(MeetCatalogActivity.this, EditorActivity.class);
-                Uri currentEventUri = ContentUris.withAppendedId(EventContract.EventEntry.CONTENT_URI, id);
 
-                intent.setData(currentEventUri);
                 Log.v(LOG_TAG, "Launching EditorActivity intent");
                 startActivity(intent);
             }
@@ -77,9 +74,14 @@ public class MeetCatalogActivity extends AppCompatActivity implements LoaderMana
 
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
                 Intent intent = new Intent(MeetCatalogActivity.this, EditorActivity.class);
+
+                Uri currentEventUri = ContentUris.withAppendedId(EventContract.EventEntry.CONTENT_URI, id);
+
+                intent.setData(currentEventUri);
+
                 Log.v(LOG_TAG, "Launching EditorActivity intent");
                 startActivity(intent);
             }
